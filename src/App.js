@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
 import { CardList } from "./Components/CardList/cardListComponent";
+import { SearchBox } from "./Components/SearchBox/searchBoxComponent";
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       monsters: [],
+      searhFeild: "",
     };
   }
 
@@ -16,10 +18,23 @@ class App extends Component {
       .then((users) => this.setState({ monsters: users }));
   }
 
+  handleChange = (e) => {
+    this.setState({ searhFeild: e.target.value })
+  };
+
   render() {
+    const { monsters, searhFeild } = this.state;
+    const filteredMonsters = monsters.filter((monster) =>
+      monster.name.toLowerCase().includes(searhFeild.toLowerCase())
+    );
     return (
       <div className="App">
-        <CardList monsters={this.state.monsters}/>
+        <h1> Monster Rolodex</h1>
+        <SearchBox
+          placeHolder="Search Monster"
+          onHandleChange={this.handleChange}
+        />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
